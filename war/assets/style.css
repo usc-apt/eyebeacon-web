@@ -43,12 +43,14 @@ h3 {
 	width: 40%;
 	padding: 20px;
 	background: rgba(0,0,0,0.5);
+	float: left;
+	margin-right: 20px;
 }
 .box h2 {
 	margin-bottom: 10px;
 }
 
-.box input {
+.box input, textarea {
 	width: 100%;
 	padding: 10px;
 	font-size: 15px;
@@ -58,6 +60,13 @@ h3 {
 	color: #fff;
 	background: rgba(255, 255, 255, 0.2);
 }
+.box textarea {
+	height: 300px;
+	margin: 2px 0;
+}
 .box input[type=submit] {
 	background: rgba(255, 255, 255, 0.5);
+}
+.clear {
+	clear: both;
 }

@@ -2,6 +2,7 @@ package com.suchbeacon.web.servlet;
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServlet;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.suchbeacon.web.Card;
 import com.suchbeacon.web.Content;
+import com.suchbeacon.web.GlassResponse;
 import com.suchbeacon.web.MirrorClient;
 import com.suchbeacon.web.WebResponse;
 
@@ -36,14 +38,21 @@ public class ContentServlet extends HttpServlet {
 		Content c = ofy().load().type(Content.class)
 				.filter("majorId", majorId)
 				.filter("minorId", minorId).first().now();
+
 		if (c != null) {
 			List<Card> cards = c.buildCards();
+			List<GlassResponse> responses = new ArrayList<GlassResponse>();
+			String status = "OK";
 			for(Card card : cards) { 
-				MirrorClient.insertTimeline(card, accessToken);
+				GlassResponse response = MirrorClient.insertTimeline(card, accessToken);
+				if(!response.getStatus().equals("200/201 OK")) {
+					status = response.getStatus();
+				}
+				responses.add(response);
 			}
 			
 			resp.setContentType("application/json");
-			resp.getWriter().println(c.toJson());
+			resp.getWriter().println(new Gson().toJson(new WebResponse(status, c.toJson(), responses)));
 		} else {
 			resp.sendError(HttpServletResponse.SC_NOT_FOUND, "cannot find target content");
 		}

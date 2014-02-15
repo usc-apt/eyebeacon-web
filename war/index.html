@@ -15,13 +15,29 @@
     </header>
     
     <div id="pushContent" class="box">
-    	<h2>Push</h2>
+    	<h2>Push to Glass</h2>
     	<form name="push" id="push_form" onsubmit="return false">
     		<input type="text" placeholder="majorId" name="majorId">
     		<input type="text" placeholder="minorId" name="minorId">
     		<input type="text" placeholder="accessToken" name="accessToken">
     		<input type="submit" value="push">
     	</form>
+    	<textarea class="results" id="push_results" disabled></textarea>
     </div>
+    
+    <div id="storeContent" class="box">
+    	<h2>Store Content</h2>
+    	<form name="store" id="store_form" onsubmit="return false">
+    		<input type="text" placeholder="majorId" name="majorId">
+    		<input type="text" placeholder="minorId" name="minorId">
+    		<input type="text" placeholder="template" name="template">
+    		<textarea placeholder="templateData" name="templateData"></textarea>
+    		<input type="submit" value="store">
+    	</form>
+    	<div id="store_results"></div>
+    </div>
+    
+    <div class="clear"></div>
+    
   </body>
 </html>

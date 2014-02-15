@@ -12,7 +12,7 @@ import java.util.List;
 import com.suchbeacon.web.Card.ActionItem;
 
 public class MirrorClient {
-	public static void insertTimeline(Card card, String authToken) {
+	public static GlassResponse insertTimeline(Card card, String authToken) {
 		try {
 			URL url = new URL("https://www.googleapis.com/mirror/v1/timeline");
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -25,7 +25,8 @@ public class MirrorClient {
 			String s = "{ html: '" + card.getHtml() + "', "
 					+ generateBundleCover(card.isBundleCover()) + ", "
 					+ generateBundleId(card.getBundleId()) + ", "
-					+ generateActionItems(card.getActionItems()) + ", " 
+					+ generateActionItems(card.getActionItems()) + ", "
+					+ generateNotification() + ", "
 					+ generateSpeakableText(card.getSpeakableText()) + " }";
 			System.out.println(s);
 			writer.write(s);
@@ -33,25 +34,22 @@ public class MirrorClient {
 
 			if (connection.getResponseCode() == HttpURLConnection.HTTP_CREATED
 					|| connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-				System.out.println("Win!");
+				return new GlassResponse("200/201 OK", "");
 			} else {
-				System.out.println("Error " + connection.getResponseCode());
 				BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-				String line;
-
+				String totalLines = "", line;
 				while ((line = reader.readLine()) != null) {
-					System.out.println(line);
+					totalLines += line;
 				}
 				reader.close();
-				// Server returned HTTP error code.
+				return new GlassResponse(String.valueOf(connection.getResponseCode()), totalLines);
 			}
 		} catch (MalformedURLException e) {
-			System.out.println("Malformed URL");
-			// ...
+			return new GlassResponse("400 Bad Request", "Malformed URL");
 		} catch (IOException e) {
 			System.out.println("IO");
 			System.out.println(e.getMessage());
-			// ...
+			return new GlassResponse("400 Bad Request", "IO Exception");
 		}
 	}
 	
@@ -89,6 +87,10 @@ public class MirrorClient {
 		ai = ai.substring(0, ai.length() - 2);
 		ai += " ] ";
 		return ai;
+	}
+	
+	private static String generateNotification() {
+		return "notification: { level: 'DEFAULT' }";
 	}
 
 	private static String generateSpeakableText(String speakableText) {
