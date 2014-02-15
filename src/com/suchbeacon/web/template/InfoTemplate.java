@@ -41,10 +41,10 @@ public class InfoTemplate extends Template {
 					+ "</article>";
 			speakableText += i.section + " " + i.desc;
 		}
-		actionItems.add(new ActionItem("DELETE", null));
+		actionItems.add(new ActionItem("DELETE"));
 		
 		if(!speakableText.isEmpty()){
-			actionItems.add(new ActionItem("READ_ALOUD", null));
+			actionItems.add(new ActionItem("READ_ALOUD"));
 		}
 		
 		if(videoUrl != null)

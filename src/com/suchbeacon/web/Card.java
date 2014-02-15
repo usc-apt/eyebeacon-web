@@ -5,11 +5,32 @@ import java.util.List;
 
 public class Card {
 	public static class ActionItem {
+		public String id;
+		public String state;
 		public String action;
 		public String payload;
+		public String displayName;
+		public String iconUrl;
+		
+		public ActionItem(String action){
+			this.action  = action;
+			this.payload = null;
+		}
 		public ActionItem(String action, String payload) {
 			this.action = action;
 			this.payload= payload;
+		}
+		public ActionItem(String id, String state, String displayName){
+			this.id 			= id;
+			this.payload		= null;
+			this.state 			= state;
+			this.action 		= "CUSTOM";
+			this.displayName 	= displayName;
+		}
+		
+		public ActionItem setIconUrl(String iconUrl){
+			this.iconUrl = iconUrl;
+			return this;
 		}
 	}
 	

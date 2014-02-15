@@ -61,10 +61,23 @@ public class MirrorClient {
 		String ai = "menuItems: [ ";
 		for (ActionItem a : actionItems) {
 			ai += "{";
-			ai += "action: '" + a.action + "'";
-			if(a.payload != null){
-				ai += ",";
-				ai += "payload: '" + a.payload + "'";
+			if(!a.action.equals("CUSTOM")){
+				ai += "action: '" + a.action + "'";
+				if(a.payload != null){
+					ai += ",";
+					ai += "payload: '" + a.payload + "'";
+				}
+			}
+			//It Custom so we need to set that up.
+			else{
+				ai += "id: '"+a.id + "', ";
+				ai += "action: '"+a.action+"', ";
+				ai += "values: [";
+				ai += 	"{";
+				ai +=		"state: '" + a.state + "', ";
+				ai +=		"displayName: '" + a.displayName + "'";
+				if(a.iconUrl != null)
+					ai += 	", iconUrl: '" + a.iconUrl + "'";
 			}
 			ai += "}";
 			ai += ", ";

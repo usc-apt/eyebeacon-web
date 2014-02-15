@@ -27,7 +27,7 @@ public class IntroTemplate extends Template {
 
 		for (Exhibit e : exhibits) {
 			List<ActionItem> actionItems = new ArrayList<ActionItem>();
-			actionItems.add(new ActionItem("DELETE", null));
+			actionItems.add(new ActionItem("DELETE"));
 			
 			if(e.videoUrl != null)
 				actionItems.add(new ActionItem("PLAY_VIDEO", e.videoUrl));

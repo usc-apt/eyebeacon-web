@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.suchbeacon.web.Card;
+import com.suchbeacon.web.Card.ActionItem;
 import com.suchbeacon.web.Template;
 
 public class PaymentTemplate extends Template {
@@ -17,8 +18,9 @@ public class PaymentTemplate extends Template {
 	public List<Card> render() {
 		System.out.println("Rendering PaymentTemplate");
 		String bundleId = generateBundleId();
-
 		List<Card> cards = new ArrayList<Card>();
+		List<ActionItem> actionItems = new ArrayList<ActionItem>();
+		
 		String html = "<article>" 
 				+ "<figure>" + "<img src=\"" + imageUrl + "\" width=\"100%\" height=\"100%\">" + "</figure>"
 				+ "<section>"
@@ -33,7 +35,11 @@ public class PaymentTemplate extends Template {
 				+ "<h1 class=\"auto-paginate\">" + "<hr>"
 				+ "<p class=\"text-small\">" + description + "</p>"
 				+ "</article>";
-		cards.add(new Card(html, bundleId, "DELETE"));
+		actionItems.add(new ActionItem("DELETE"));
+		actionItems.add(new ActionItem("purchase", "DEFAULT", "Purchase"));
+		
+		
+		cards.add(new Card(html, bundleId, (ActionItem[]) actionItems.toArray()));
 		return cards;
 	}
 }
