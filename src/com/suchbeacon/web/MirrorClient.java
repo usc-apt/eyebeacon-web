@@ -25,7 +25,8 @@ public class MirrorClient {
 			String s = "{ html: '" + card.getHtml() + "', "
 					+ generateBundleCover(card.isBundleCover()) + ", "
 					+ generateBundleId(card.getBundleId()) + ", "
-					+ generateActionItems(card.getActionItems()) + ", " 
+					+ generateActionItems(card.getActionItems()) + ", "
+					+ generateNotification() + ", "
 					+ generateSpeakableText(card.getSpeakableText()) + " }";
 			System.out.println(s);
 			writer.write(s);
@@ -86,6 +87,10 @@ public class MirrorClient {
 		ai = ai.substring(0, ai.length() - 2);
 		ai += " ] ";
 		return ai;
+	}
+	
+	private static String generateNotification() {
+		return "notification: { level: 'DEFAULT' }";
 	}
 
 	private static String generateSpeakableText(String speakableText) {
