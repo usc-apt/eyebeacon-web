@@ -2,13 +2,14 @@ package com.suchbeacon.web.servlet;
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.api.services.mirror.model.TimelineItem;
 import com.google.gson.Gson;
+import com.suchbeacon.web.Card;
 import com.suchbeacon.web.Content;
 import com.suchbeacon.web.MirrorClient;
 import com.suchbeacon.web.WebResponse;
@@ -36,12 +37,10 @@ public class ContentServlet extends HttpServlet {
 				.filter("majorId", majorId)
 				.filter("minorId", minorId).first().now();
 		if (c != null) {
-			String template = c.buildTemplate();
-			System.out.println("#####################");
-			System.out.println("Template:");
-			System.out.println(template);
-			
-			MirrorClient.insertTimeline(template, accessToken);
+			List<Card> cards = c.buildCards();
+			for(Card card : cards) { 
+				MirrorClient.insertTimeline(card, accessToken);
+			}
 			
 			resp.setContentType("application/json");
 			resp.getWriter().println(c.toJson());

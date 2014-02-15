@@ -2,7 +2,9 @@ package com.suchbeacon.web.template;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
+import com.suchbeacon.web.Card;
 import com.suchbeacon.web.Template;
 
 public class IntroTemplate extends Template {
@@ -11,22 +13,23 @@ public class IntroTemplate extends Template {
 	private Exhibit[] exhibits;
 
 	@Override
-	public String render() {
+	public List<Card> render() {
 		System.out.println("Rendering IntroTemplate");
-
-		String cards = "";
-		cards += "<article class=\"photo\">"
+		List<Card> cards = new ArrayList<Card>();
+		String bundleId = generateBundleId();
+		
+		cards.add(new Card("<article class=\"photo\">"
 				+ "<img src=\"" + imageUrl + "\" width=\"100%\" height=\"100%\" />"
 				+ "<div class=\"overlay-gradient-tall-dark\" />"
 				+ "<section>" + "<p class=\"text-auto-size\">" + name + "</p>" + "</section>"
-				+ "</article>";
+				+ "</article>", bundleId, "DELETE"));
 
 		for (Exhibit e : exhibits) {
-			cards += "<article class=\"photo\">"
+			cards.add(new Card("<article class=\"photo\">"
 					+ "<img src=\"" + e.imageUrl + "\" width=\"100%\" height=\"100%\" />"
 					+ "<div class=\"overlay-gardient-tall-dark\" />"
 					+ "<section>" + "<p class=\"text-auto-size\">" + e.name + "</p>" + "</section>"
-					+ "</article>";
+					+ "</article>", bundleId, "DELETE"));
 		}
 		return cards;
 	}

@@ -7,9 +7,12 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
+
+import com.suchbeacon.web.Card.ActionItem;
 
 public class MirrorClient {
-	public static void insertTimeline(String html, String authToken) {
+	public static void insertTimeline(Card card, String authToken) {
 		try {
 			URL url = new URL("https://www.googleapis.com/mirror/v1/timeline");
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -19,7 +22,11 @@ public class MirrorClient {
 			connection.setRequestProperty("Content-Type", "application/json");
 
 			OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
-			writer.write("{ html: '" + html + "' }");
+			String s = "{ html: '" + card.getHtml() + "', " 
+					+ generateBundleId(card.getBundleId()) + ", "
+					+ generateActionItems(card.getActionItems()) + " }";
+			System.out.println(s);
+			writer.write(s);
 			writer.close();
 
 			if (connection.getResponseCode() == HttpURLConnection.HTTP_CREATED
@@ -43,5 +50,22 @@ public class MirrorClient {
 			System.out.println("IO");
 			// ...
 		}
+	}
+
+	private static String generateBundleId(String bundleId) {
+		return "bundleId: '" + bundleId + "'";
+	}
+
+	private static String generateActionItems(List<ActionItem> actionItems) {
+		String ai = "menuItems: [ ";
+		for (ActionItem a : actionItems) {
+			ai += "{";
+			ai += "action: '" + a.action + "'";
+			ai += "}";
+			ai += ", ";
+		}
+		ai = ai.substring(0, ai.length() - 2);
+		ai += " ] ";
+		return ai;
 	}
 }
