@@ -23,7 +23,7 @@ public class IntroTemplate extends Template {
 				+ "<img src=\"" + imageUrl + "\" width=\"100%\" height=\"100%\" />"
 				+ "<div class=\"overlay-gradient-tall-dark\" />"
 				+ "<section>" + "<p class=\"text-auto-size\">" + name + "</p>" + "</section>"
-				+ "</article>", bundleId, "DELETE"));
+				+ "</article>", bundleId, "DELETE").setIsBundleCover(true));
 
 		for (Exhibit e : exhibits) {
 			List<ActionItem> actionItems = new ArrayList<ActionItem>();
@@ -36,7 +36,7 @@ public class IntroTemplate extends Template {
 					+ "<img src=\"" + e.imageUrl + "\" width=\"100%\" height=\"100%\" />"
 					+ "<div class=\"overlay-gardient-tall-dark\" />"
 					+ "<section>" + "<p class=\"text-auto-size\">" + e.name + "</p>" + "</section>"
-					+ "</article>", bundleId, (String[]) actionItems.toArray() ));
+					+ "</article>", bundleId, actionItems ));
 		}
 		return cards;
 	}

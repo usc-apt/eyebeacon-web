@@ -51,7 +51,7 @@ public class InfoTemplate extends Template {
 			actionItems.add(new ActionItem("PLAY_VIDEO", videoUrl));
 		
 		//We can setSpeakableText anyway because there will not be a read_aloud action
-		cards.add((new Card(html, bundleId, (ActionItem[]) actionItems.toArray()).setSpeakableText(speakableText)));
+		cards.add((new Card(html, bundleId, actionItems).setSpeakableText(speakableText)));
 
 		return cards;
 	}

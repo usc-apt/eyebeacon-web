@@ -8,6 +8,10 @@ import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Ignore;
 import com.googlecode.objectify.annotation.Index;
 
+/*
+ * Content holds templateName and templateDataJson.
+ * With those data, we can build a Template, which will be turned into Cards.
+ */
 @Entity
 public class Content {
 	@Id
@@ -15,6 +19,7 @@ public class Content {
 	@Index int majorId;
 	@Index int minorId;
 
+	@Ignore Template template;
 	@Ignore List<Card> cards;
 	
 	transient String templateName;
@@ -29,15 +34,23 @@ public class Content {
 		this.templateDataJson = templateDataJson;
 	}
 	
+	public Template buildTemplate() {
+		if(template == null) {
+			template = Template.build(templateName, templateDataJson);
+		}
+		return template;
+	}
+	
 	public List<Card> buildCards() {
 		if(cards == null) {
-			cards = Template.build(templateName, templateDataJson).render();
+			cards = buildTemplate().render();
 		}
 		return cards;
 	}
 	
 	public String toJson() {
 		buildCards();
-		return new Gson().toJson(this);
+		// IMPORTANT: Renders json for TEMPLATE, not card.
+		return new Gson().toJson(template);
 	}
 }

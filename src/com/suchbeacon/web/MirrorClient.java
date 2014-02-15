@@ -22,9 +22,10 @@ public class MirrorClient {
 			connection.setRequestProperty("Content-Type", "application/json");
 
 			OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
-			String s = "{ html: '" + card.getHtml() + "', " 
+			String s = "{ html: '" + card.getHtml() + "', "
+					+ generateBundleCover(card.isBundleCover()) + ", "
 					+ generateBundleId(card.getBundleId()) + ", "
-					+ generateActionItems(card.getActionItems()) + ","
+					+ generateActionItems(card.getActionItems()) + ", " 
 					+ generateSpeakableText(card.getSpeakableText()) + " }";
 			System.out.println(s);
 			writer.write(s);
@@ -49,8 +50,13 @@ public class MirrorClient {
 			// ...
 		} catch (IOException e) {
 			System.out.println("IO");
+			System.out.println(e.getMessage());
 			// ...
 		}
+	}
+	
+	private static String generateBundleCover(boolean isBundleCover) {
+		return "isBundleCover: " + isBundleCover;
 	}
 
 	private static String generateBundleId(String bundleId) {
@@ -61,23 +67,21 @@ public class MirrorClient {
 		String ai = "menuItems: [ ";
 		for (ActionItem a : actionItems) {
 			ai += "{";
-			if(!a.action.equals("CUSTOM")){
+			if (!a.action.equals("CUSTOM")) {
 				ai += "action: '" + a.action + "'";
-				if(a.payload != null){
+				if (a.payload != null) {
 					ai += ",";
 					ai += "payload: '" + a.payload + "'";
 				}
-			}
-			//It Custom so we need to set that up.
-			else{
-				ai += "id: '"+a.id + "', ";
-				ai += "action: '"+a.action+"', ";
+			} else {
+				// Custom so we need to set that up.
+				ai += "id: '" + a.id + "', ";
+				ai += "action: '" + a.action + "', ";
 				ai += "values: [";
-				ai += 	"{";
-				ai +=		"state: '" + a.state + "', ";
-				ai +=		"displayName: '" + a.displayName + "'";
-				if(a.iconUrl != null)
-					ai += 	", iconUrl: '" + a.iconUrl + "'";
+				ai += "{";
+				ai += "state: '" + a.state + "', ";
+				ai += "displayName: '" + a.displayName + "'";
+				if (a.iconUrl != null) ai += ", iconUrl: '" + a.iconUrl + "'";
 			}
 			ai += "}";
 			ai += ", ";
@@ -86,8 +90,8 @@ public class MirrorClient {
 		ai += " ] ";
 		return ai;
 	}
-	
-	private static String generateSpeakableText(String speakableText){
+
+	private static String generateSpeakableText(String speakableText) {
 		String st = "speakableText: '";
 		st += speakableText;
 		st += "'";
