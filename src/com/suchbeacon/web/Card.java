@@ -15,6 +15,7 @@ public class Card {
 	
 	private String html;
 	private String bundleId;
+	private String speakableText;
 	private List<ActionItem> actionItems;
 	
 	public String getHtml() {
@@ -23,6 +24,16 @@ public class Card {
 	public String getBundleId() {
 		return bundleId;
 	}
+	
+	public String getSpeakableText(){
+		return speakableText;
+	}
+	
+	public Card setSpeakableText(String speakableText){
+		this.speakableText = speakableText;
+		return this;
+	}
+	
 	public List<ActionItem> getActionItems() {
 		return actionItems;
 	}
@@ -30,6 +41,7 @@ public class Card {
 	public Card(String html, String bundleId, ActionItem ... actionItems) {
 		this.html = html;
 		this.bundleId = bundleId;
+		this.speakableText = "";
 		
 		this.actionItems = new ArrayList<ActionItem>();
 		for(ActionItem a : actionItems) {
@@ -40,10 +52,11 @@ public class Card {
 	public Card(String html, String bundleId, String ... actions) {
 		this.html = html;
 		this.bundleId = bundleId;
+		this.speakableText = "";
 		
 		this.actionItems = new ArrayList<ActionItem>();
 		for(String s : actions) {
-			this.actionItems.add(new ActionItem(s));
+			this.actionItems.add(new ActionItem(s, null));
 		}
 		
 	}

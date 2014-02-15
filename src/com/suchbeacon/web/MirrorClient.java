@@ -24,7 +24,8 @@ public class MirrorClient {
 			OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
 			String s = "{ html: '" + card.getHtml() + "', " 
 					+ generateBundleId(card.getBundleId()) + ", "
-					+ generateActionItems(card.getActionItems()) + " }";
+					+ generateActionItems(card.getActionItems()) + ","
+					+ generateSpeakableText(card.getSpeakableText()) + " }";
 			System.out.println(s);
 			writer.write(s);
 			writer.close();
@@ -71,5 +72,12 @@ public class MirrorClient {
 		ai = ai.substring(0, ai.length() - 2);
 		ai += " ] ";
 		return ai;
+	}
+	
+	private static String generateSpeakableText(String speakableText){
+		String st = "speakableText: '";
+		st += speakableText;
+		st += "'";
+		return st;
 	}
 }
