@@ -11,6 +11,7 @@ public class InfoTemplate extends Template {
 	private String name;
 	private String imageUrl;
 	private String location;
+	private String videoUrl;
 	private String speakableText;
 	private Info[] infos;
 
@@ -32,20 +33,24 @@ public class InfoTemplate extends Template {
 				+ "</section>"
 				+ "</article>";
 
-		
+		//Adds speakable text only if we have info to tell the user
 		for (Info i : infos) {
 			html += "<article class=\"auto-paignate\">"
 					+ "<h1 class=\"text-large\">" + i.section + "</h1>"
 					+ "<p class=\"text-small\">" + i.desc + "</p>" 
 					+ "</article>";
+			speakableText += i.section + " " + i.desc;
 		}
 		actionItems.add(new ActionItem("DELETE", null));
 		
 		if(!speakableText.isEmpty()){
 			actionItems.add(new ActionItem("READ_ALOUD", null));
-			
 		}
 		
+		if(videoUrl != null)
+			actionItems.add(new ActionItem("PLAY_VIDEO", videoUrl));
+		
+		//We can setSpeakableText anyway because there will not be a read_aloud action
 		cards.add((new Card(html, bundleId, (ActionItem[]) actionItems.toArray()).setSpeakableText(speakableText)));
 
 		return cards;
