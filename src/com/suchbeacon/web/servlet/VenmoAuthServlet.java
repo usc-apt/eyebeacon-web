@@ -28,6 +28,7 @@ public class VenmoAuthServlet extends HttpServlet {
 
     	HttpURLConnection connection = (HttpURLConnection) authUrl.openConnection(); 
     	connection.setRequestMethod("POST");
+    	connection.setDoOutput(true);
     	try {
     		authJson.put("client id", Constants.VENMO_CLIENT_ID);
     		authJson.put("client secret", Constants.VENMO_CLIENT_SECRET);
