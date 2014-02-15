@@ -7,13 +7,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.api.services.mirror.model.TimelineItem;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.suchbeacon.web.Content;
+import com.suchbeacon.web.MirrorClient;
 import com.suchbeacon.web.WebResponse;
 
 @SuppressWarnings("serial")
-public class ContentServlet extends HttpServlet {
+public class ContentServlet extends HttpServlet {	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		int majorId = 0;
 		int minorId = 0;
@@ -35,6 +36,13 @@ public class ContentServlet extends HttpServlet {
 				.filter("majorId", majorId)
 				.filter("minorId", minorId).first().now();
 		if (c != null) {
+			String template = c.buildTemplate();
+			System.out.println("#####################");
+			System.out.println("Template:");
+			System.out.println(template);
+			
+			MirrorClient.insertTimeline(template, accessToken);
+			
 			resp.setContentType("application/json");
 			resp.getWriter().println(c.toJson());
 		} else {

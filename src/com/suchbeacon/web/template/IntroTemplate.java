@@ -11,22 +11,22 @@ public class IntroTemplate extends Template {
 	private Exhibit[] exhibits;
 
 	@Override
-	public List<String> render() {
+	public String render() {
 		System.out.println("Rendering IntroTemplate");
 
-		List<String> cards = new ArrayList<String>();
-		cards.add("<article class=\"photo\">"
+		String cards = "";
+		cards += "<article class=\"photo\">"
 				+ "<img src=\"" + imageUrl + "\" width=\"100%\" height=\"100%\" />"
 				+ "<div class=\"overlay-gradient-tall-dark\" />"
 				+ "<section>" + "<p class=\"text-auto-size\">" + name + "</p>" + "</section>"
-				+ "</article>");
+				+ "</article>";
 
 		for (Exhibit e : exhibits) {
-			cards.add("<article class=\"photo\">"
+			cards += "<article class=\"photo\">"
 					+ "<img src=\"" + e.imageUrl + "\" width=\"100%\" height=\"100%\" />"
 					+ "<div class=\"overlay-gardient-tall-dark\" />"
 					+ "<section>" + "<p class=\"text-auto-size\">" + e.name + "</p>" + "</section>"
-					+ "</article>");
+					+ "</article>";
 		}
 		return cards;
 	}
