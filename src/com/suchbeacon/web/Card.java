@@ -15,16 +15,6 @@ public class Card {
 	private String bundleId;
 	private List<ActionItem> actionItems;
 	
-	public Card(String html, String bundleId, ActionItem ... actionItems) {
-		this.html = html;
-		this.bundleId = bundleId;
-		
-		this.actionItems = new ArrayList<ActionItem>();
-		for(ActionItem a : actionItems) {
-			this.actionItems.add(a);
-		}
-	}
-	
 	public String getHtml() {
 		return html;
 	}
@@ -33,6 +23,16 @@ public class Card {
 	}
 	public List<ActionItem> getActionItems() {
 		return actionItems;
+	}
+	
+	public Card(String html, String bundleId, ActionItem ... actionItems) {
+		this.html = html;
+		this.bundleId = bundleId;
+		
+		this.actionItems = new ArrayList<ActionItem>();
+		for(ActionItem a : actionItems) {
+			this.actionItems.add(a);
+		}
 	}
 	
 	public Card(String html, String bundleId, String ... actions) {
