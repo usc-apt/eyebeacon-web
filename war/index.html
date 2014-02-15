@@ -1,27 +1,27 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<!-- The HTML 4.01 Transitional DOCTYPE declaration-->
-<!-- above set at the top of the file will set     -->
-<!-- the browser's rendering engine into           -->
-<!-- "Quirks Mode". Replacing this declaration     -->
-<!-- with a "Standards Mode" doctype is supported, -->
-<!-- but may lead to some differences in layout.   -->
-
+<!doctype>
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Hello App Engine</title>
+    <link rel="stylesheet" type="text/css" href="assets/style.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script type="text/javascript" src="assets/eyebeacon.js"></script>
+    <title>eyeBeacon</title>
   </head>
 
   <body>
-    <h1>Hello App Engine!</h1>
-	
-    <table>
-      <tr>
-        <td colspan="2" style="font-weight:bold;">Available Servlets:</td>        
-      </tr>
-      <tr>
-        <td><a href="suchbeacon">Suchbeacon</a></td>
-      </tr>
-    </table>
+  	<header>
+	    <h1>eyeBeacon</h1>
+	    <h2>from now, <b>see the world differently</b>.</h2>
+    </header>
+    
+    <div id="pushContent" class="box">
+    	<h2>Push</h2>
+    	<form name="push" id="push_form" onsubmit="return false">
+    		<input type="text" placeholder="majorId" name="majorId">
+    		<input type="text" placeholder="minorId" name="minorId">
+    		<input type="text" placeholder="accessToken" name="accessToken">
+    		<input type="submit" value="push">
+    	</form>
+    </div>
   </body>
 </html>

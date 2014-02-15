@@ -9,8 +9,8 @@ import com.suchbeacon.web.Template;
 
 public class InfoTemplate extends Template {
 	private String name;
-	private String imageUrl;
 	private String location;
+	private String imageUrl;
 	private String videoUrl;
 	private String speakableText;
 	private Info[] infos;

@@ -2,16 +2,17 @@ package com.suchbeacon.web.template;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import com.suchbeacon.web.Card;
 import com.suchbeacon.web.Card.ActionItem;
 import com.suchbeacon.web.Template;
 
 public class IntroTemplate extends Template {
-	private String name;
-	private String imageUrl;
-	private Exhibit[] exhibits;
+	String name;
+	String imageUrl;
+	Exhibit[] exhibits;
+	
+	private IntroTemplate() { }
 
 	@Override
 	public List<Card> render() {
@@ -42,12 +43,12 @@ public class IntroTemplate extends Template {
 	}
 
 	static class Exhibit {
-		private String name;
-		private double[] location;
-		private String imageUrl;
-		private String videoUrl;
-		public Exhibit() {
-		}
+		public Exhibit() { }
+		
+		String name;
+		double[] location;
+		String imageUrl;
+		String videoUrl;
 	}
 
 }
