@@ -6,8 +6,10 @@ import java.util.List;
 public class Card {
 	public static class ActionItem {
 		public String action;
-		public ActionItem(String action) {
+		public String payload;
+		public ActionItem(String action, String payload) {
 			this.action = action;
+			this.payload= payload;
 		}
 	}
 	

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.suchbeacon.web.Card;
+import com.suchbeacon.web.Card.ActionItem;
 import com.suchbeacon.web.Template;
 
 public class IntroTemplate extends Template {
@@ -25,11 +26,17 @@ public class IntroTemplate extends Template {
 				+ "</article>", bundleId, "DELETE"));
 
 		for (Exhibit e : exhibits) {
+			List<ActionItem> actionItems = new ArrayList<ActionItem>();
+			actionItems.add(new ActionItem("DELETE", null));
+			
+			if(e.videoUrl != null)
+				actionItems.add(new ActionItem("PLAY_VIDEO", e.videoUrl));
+				
 			cards.add(new Card("<article class=\"photo\">"
 					+ "<img src=\"" + e.imageUrl + "\" width=\"100%\" height=\"100%\" />"
 					+ "<div class=\"overlay-gardient-tall-dark\" />"
 					+ "<section>" + "<p class=\"text-auto-size\">" + e.name + "</p>" + "</section>"
-					+ "</article>", bundleId, "DELETE"));
+					+ "</article>", bundleId, (String[]) actionItems.toArray() ));
 		}
 		return cards;
 	}
@@ -38,7 +45,7 @@ public class IntroTemplate extends Template {
 		private String name;
 		private double[] location;
 		private String imageUrl;
-
+		private String videoUrl;
 		public Exhibit() {
 		}
 	}

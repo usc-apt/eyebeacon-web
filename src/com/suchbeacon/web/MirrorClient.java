@@ -61,6 +61,10 @@ public class MirrorClient {
 		for (ActionItem a : actionItems) {
 			ai += "{";
 			ai += "action: '" + a.action + "'";
+			if(a.payload != null){
+				ai += ",";
+				ai += "payload: '" + a.payload + "'";
+			}
 			ai += "}";
 			ai += ", ";
 		}
