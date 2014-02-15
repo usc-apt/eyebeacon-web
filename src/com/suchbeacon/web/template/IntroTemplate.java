@@ -1,5 +1,8 @@
 package com.suchbeacon.web.template;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.suchbeacon.web.Template;
 
 public class IntroTemplate extends Template {
@@ -8,17 +11,24 @@ public class IntroTemplate extends Template {
 	private Exhibit[] exhibits;
 
 	@Override
-	public String render() {
+	public List<String> render() {
 		System.out.println("Rendering IntroTemplate");
-		String s = "";
-		s += "Name: " + name + "\n";
-		s += "Image: " + imageUrl + "\n";
-		if (exhibits != null) {
-			for (Exhibit e : exhibits) {
-				s += "Exhibit: " + e.name + "\n";
-			}
+
+		List<String> cards = new ArrayList<String>();
+		cards.add("<article class=\"photo\">"
+				+ "<img src=\"" + imageUrl + "\" width=\"100%\" height=\"100%\" />"
+				+ "<div class=\"overlay-gradient-tall-dark\" />"
+				+ "<section>" + "<p class=\"text-auto-size\">" + name + "</p>" + "</section>"
+				+ "</article>");
+
+		for (Exhibit e : exhibits) {
+			cards.add("<article class=\"photo\">"
+					+ "<img src=\"" + e.imageUrl + "\" width=\"100%\" height=\"100%\" />"
+					+ "<div class=\"overlay-gardient-tall-dark\" />"
+					+ "<section>" + "<p class=\"text-auto-size\">" + e.name + "</p>" + "</section>"
+					+ "</article>");
 		}
-		return s;
+		return cards;
 	}
 
 	static class Exhibit {

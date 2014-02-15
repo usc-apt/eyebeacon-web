@@ -1,5 +1,7 @@
 package com.suchbeacon.web;
 
+import java.util.List;
+
 import com.google.gson.Gson;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
@@ -13,7 +15,7 @@ public class Content {
 	@Index int majorId;
 	@Index int minorId;
 
-	@Ignore String templateString = "";
+	@Ignore List<String> templateStrings;
 	
 	transient String templateName;
 	transient String templateDataJson;
@@ -28,8 +30,8 @@ public class Content {
 	}
 	
 	public String toJson() {
-		if(templateString.equals("")) {
-			templateString = Template.build(templateName, templateDataJson).render();
+		if(templateStrings == null) {
+			templateStrings = Template.build(templateName, templateDataJson).render();
 			return new Gson().toJson(this);
 		}
 		return null;
