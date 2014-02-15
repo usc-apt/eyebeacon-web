@@ -2,6 +2,8 @@ package com.suchbeacon.web;
 
 import java.util.List;
 
+import com.google.appengine.labs.repackaged.org.json.JSONException;
+import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.google.gson.Gson;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
@@ -48,9 +50,14 @@ public class Content {
 		return cards;
 	}
 	
-	public String toJson() {
+	public JSONObject toJson() {
 		buildCards();
 		// IMPORTANT: Renders json for TEMPLATE, not card.
-		return new Gson().toJson(template);
+		try {
+			return template.toJson();
+		} catch (JSONException e) {
+			System.out.println("Failed to build JSON for " + majorId + "/" + minorId);
+			return null;
+		}
 	}
 }

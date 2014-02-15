@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.labs.repackaged.org.json.JSONException;
+import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.google.gson.Gson;
 import com.suchbeacon.web.Card;
 import com.suchbeacon.web.Content;
@@ -51,8 +53,15 @@ public class ContentServlet extends HttpServlet {
 				responses.add(response);
 			}
 			
-			resp.setContentType("application/json");
-			resp.getWriter().println(new Gson().toJson(new WebResponse(status, c.toJson(), responses)));
+			try {
+				JSONObject webResp = new WebResponse(status, c.toJson(), responses).toJson();
+				resp.setContentType("application/json");
+				resp.getWriter().println(webResp.toString());
+			} catch (JSONException e) { 
+				resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "target content parsing error");
+				System.out.println("Error parsing JSON");
+			}
+			
 		} else {
 			resp.sendError(HttpServletResponse.SC_NOT_FOUND, "cannot find target content");
 		}

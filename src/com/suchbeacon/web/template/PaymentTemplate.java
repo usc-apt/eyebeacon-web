@@ -3,6 +3,8 @@ package com.suchbeacon.web.template;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.appengine.labs.repackaged.org.json.JSONException;
+import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.suchbeacon.web.Card;
 import com.suchbeacon.web.Card.ActionItem;
 import com.suchbeacon.web.Template;
@@ -41,5 +43,17 @@ public class PaymentTemplate extends Template {
 		
 		cards.add(new Card(html, bundleId, (ActionItem[]) actionItems.toArray()));
 		return cards;
+	}
+
+	@Override
+	public JSONObject toJson() throws JSONException {
+		JSONObject json = new JSONObject();
+		json.put("name", name);
+		json.put("price", price);
+		json.put("imageUrl", imageUrl);
+		json.put("location", location);
+		json.put("description", description);
+		
+		return json;
 	}
 }
