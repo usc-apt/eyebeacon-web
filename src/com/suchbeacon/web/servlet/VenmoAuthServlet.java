@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,12 +19,13 @@ import com.suchbeacon.web.Constants;
 
 @SuppressWarnings("serial")
 public class VenmoAuthServlet extends HttpServlet {
+  private static final Logger log = Logger.getLogger(VenmoAuthServlet.class.getName());
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		
     	String auth_token 	= req.getParameter("code");
     	JSONObject authJson = new JSONObject();
     	URL authUrl 				= new URL(Constants.VENMO_OAUTH_ACCESSTOKEN);
-		
+
     	HttpURLConnection connection = (HttpURLConnection) authUrl.openConnection(); 
     	connection.setRequestMethod("POST");
     	try {
@@ -55,9 +58,8 @@ public class VenmoAuthServlet extends HttpServlet {
     		
     		try {
 					jsonResponse = new JSONObject(jsonRawResponse);	
-					System.out.println(jsonResponse.toString());
+					log.log(Level.INFO, "VENMORESPONSE: " + jsonResponse.toString());
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
     		
