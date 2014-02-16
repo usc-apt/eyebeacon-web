@@ -106,7 +106,8 @@ public class ContentServlet extends HttpServlet {
 			return;
 		}
 		
-		if(templateName == "payment") {
+		System.out.println(templateName);
+		if(templateName.equals("payment")) {
 			try {
 				JSONObject json = new JSONObject(templateDataJson);
 				Item i = new Item(
@@ -118,6 +119,7 @@ public class ContentServlet extends HttpServlet {
 				ofy().save().entity(i).now();
 				json.put("itemId", i.getId());
 				templateDataJson = json.toString();
+				System.out.println(templateDataJson);
 			} catch (JSONException e) {
 				System.out.println("stupid json.");
 				e.printStackTrace();

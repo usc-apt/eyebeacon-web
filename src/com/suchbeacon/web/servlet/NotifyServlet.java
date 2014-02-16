@@ -50,6 +50,7 @@ public class NotifyServlet extends HttpServlet {
 				// TODO: Pull from the database and get the information about the item
 				/* Temporary Info for item */
 				String buyingItemId = ua.getPayload();
+				System.out.println("PAYLOAD: " + buyingItemId);
 				String buyingItemName = "Sloth Poster";
 				String buyingItemDesc = "Dolla Dolla Bill Y'all";
 				double buyingItemPrice = 0.10;
