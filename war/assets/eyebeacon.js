@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	$("form#push_form").submit(function() {
+		$("#push_results").val("");
 		var majorId = $(this).find('input[name=majorId]').val();
 		var minorId = $(this).find('input[name=minorId]').val();
 		var accessToken = $(this).find('input[name=accessToken]').val();

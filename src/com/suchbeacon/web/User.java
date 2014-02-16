@@ -10,17 +10,44 @@ import com.googlecode.objectify.annotation.Index;
 
 @Entity
 public class User {
+
 	@Id Long id;
 	@Index String email;
 	Date registerTime;
 	String authToken;
 	
+	String venmoAuthToken;
+	String venmoRefreshToken;
+
 	private User() { } 
 	
 	public User(String email, String authToken) {
 		this.email = email;
 		this.authToken = authToken;
 		this.registerTime = new Date();
+	}
+	
+	public User(String email, String venmoAuthToken, String venmoRefreshToken) {
+		this.email = email;
+		this.venmoAuthToken = venmoAuthToken;
+		this.venmoRefreshToken = venmoRefreshToken;
+		this.registerTime = new Date();
+	}
+	
+	public String getVenmoAuthToken() {
+		return venmoAuthToken;
+	}
+
+	public String getVenmoRefreshToken() {
+		return venmoRefreshToken;
+	}
+
+	public void setVenmoAuthToken(String venmoAuthToken) {
+		this.venmoAuthToken = venmoAuthToken;
+	}
+
+	public void setVenmoRefreshToken(String venmoRefreshToken) {
+		this.venmoRefreshToken = venmoRefreshToken;
 	}
 	
 	public static void updateAuthToken(String email, String newAuthToken) {

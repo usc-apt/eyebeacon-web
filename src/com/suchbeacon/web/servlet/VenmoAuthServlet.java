@@ -1,5 +1,7 @@
 package com.suchbeacon.web.servlet;
 
+import static com.googlecode.objectify.ObjectifyService.ofy;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -16,34 +18,27 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.suchbeacon.web.Constants;
+import com.suchbeacon.web.User;
 
 @SuppressWarnings("serial")
 public class VenmoAuthServlet extends HttpServlet {
 	private static final Logger log = Logger.getLogger(VenmoAuthServlet.class.getName());
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
-		String auth_token = req.getParameter("code");
-		JSONObject authJson = new JSONObject();
+		String code = req.getParameter("code");
+		String email = req.getParameter("state");
+		
 		URL authUrl = new URL(Constants.VENMO_OAUTH_ACCESSTOKEN);
-
 		HttpURLConnection connection = (HttpURLConnection) authUrl.openConnection();
-		connection.setDoOutput(true);	
+		connection.setDoOutput(true);
 		connection.setRequestMethod("POST");
-		try {
-			authJson.put("client_id", Constants.VENMO_CLIENT_ID);
-			authJson.put("client_secret", Constants.VENMO_CLIENT_SECRET);
-			authJson.put("code", auth_token);
 
-			OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
-			writer.write("client_id=" + Constants.VENMO_CLIENT_ID 
-					+ "&client_secret=" + Constants.VENMO_CLIENT_SECRET 
-					+ "&code=" + auth_token);
-			
-			writer.close();
-		} catch (JSONException e) {
-		}
-
+		OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+		writer.write("client_id=" + Constants.VENMO_CLIENT_ID 
+				+ "&client_secret=" + Constants.VENMO_CLIENT_SECRET
+				+ "&code=" + code);
+		writer.close();
+		
 		if (connection.getResponseCode() == HttpURLConnection.HTTP_CREATED
 				|| connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			System.out.println("Success!");
@@ -53,15 +48,28 @@ public class VenmoAuthServlet extends HttpServlet {
 
 			String jsonRawResponse = "";
 			String line;
-
 			while ((line = reader.readLine()) != null)
-				jsonRawResponse.concat(line);
+				jsonRawResponse = jsonRawResponse.concat(line);
 
 			reader.close();
-
 			try {
 				jsonResponse = new JSONObject(jsonRawResponse);
-				log.log(Level.INFO, "VENMORESPONSE: " + jsonResponse.toString());
+				System.out.println("VenmoResponse: ");
+				System.out.println(jsonResponse.toString());
+				String venmoAccessToken = jsonResponse.getString("access_token");
+				String venmoRefreshToken = jsonResponse.getString("refresh_token");
+				
+				User u = User.findUser(email);
+				if(u != null) {
+					System.out.println("found email. Linking venmo");
+					u.setVenmoAuthToken(venmoAccessToken);
+					u.setVenmoRefreshToken(venmoRefreshToken);
+					ofy().save().entity(u).now();
+				} else {
+					System.out.println("Creating new user with email " + email);
+					u = new User(email, venmoAccessToken, venmoRefreshToken);
+					ofy().save().entity(u).now();
+				}
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -75,7 +83,6 @@ public class VenmoAuthServlet extends HttpServlet {
 				System.out.println(line);
 			}
 			reader.close();
-			// Server returned HTTP error code.
 		}
 	}
 

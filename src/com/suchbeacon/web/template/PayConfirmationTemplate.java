@@ -12,6 +12,7 @@ import com.suchbeacon.web.Card.ActionItem;
 public class PayConfirmationTemplate extends Template {
 	private String name;
 	private double price;
+	private String description;
 	private String imageUrl;
 	private String location;
 	private boolean paid;
@@ -35,7 +36,11 @@ public class PayConfirmationTemplate extends Template {
 				+	paidDesc
 				+ "</section>" 
 				+ "</article>";
-		return null;
+		
+		actionItems.add(new ActionItem("DELETE"));
+		
+		cards.add(new Card(html, bundleId, actionItems));
+		return cards;
 	}
 
 	@Override
