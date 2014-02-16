@@ -97,6 +97,8 @@ public class MirrorClient {
 				// Custom so we need to set that up.
 				menuItem.put("id", a.id);
 				menuItem.put("payload", a.payload);
+				System.out.println("RemovingWhenSelected");
+				menuItem.put("removeWhenSelected", a.removeWhenSelected);
 				JSONArray valuesArray = new JSONArray();
 				
 				JSONObject value = new JSONObject();

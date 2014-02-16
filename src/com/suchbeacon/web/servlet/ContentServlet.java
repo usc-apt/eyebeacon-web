@@ -31,7 +31,7 @@ public class ContentServlet extends HttpServlet {
 			majorId = Integer.parseInt(req.getParameter("majorId"));
 			minorId = Integer.parseInt(req.getParameter("minorId"));
 			accessToken = req.getParameter("accessToken");
-			email = req.getParameter("plusId");
+			email = req.getParameter("email");
 			
 			if (accessToken.length() < 1 || email.length() < 1) {
 				throw new NullPointerException();
@@ -55,12 +55,14 @@ public class ContentServlet extends HttpServlet {
 			
 			// subscribe to user's timeline if doesn't exist already
 			if(User.findUser(email) == null) {
-				User user = new User(email);
+				User user = new User(email, accessToken);
 				ofy().save().entity(user).now();
 				
 				GlassResponse response = MirrorClient.insertSubscription(user, accessToken);
 				if(!response.getStatus().equals("200/201 OK")) { status = response.getStatus(); }
 				responses.add(response);
+			} else {
+				User.updateAuthToken(email, accessToken);
 			}
 			
 			for(Card card : cards) { 

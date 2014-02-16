@@ -13,12 +13,20 @@ public class User {
 	@Id Long id;
 	@Index String email;
 	Date registerTime;
+	String authToken;
 	
 	private User() { } 
 	
-	public User(String email) {
+	public User(String email, String authToken) {
 		this.email = email;
+		this.authToken = authToken;
 		this.registerTime = new Date();
+	}
+	
+	public static void updateAuthToken(String email, String newAuthToken) {
+		User u = findUser(email);
+		u.authToken = newAuthToken;
+		ofy().save().entity(u).now();
 	}
 	
 	public static User findUser(String email) {
@@ -28,6 +36,9 @@ public class User {
 		} else {
 			return null;
 		}
-		
+	}
+	
+	public static String getAuthTokenFromEmail(String email) {
+		return findUser(email).authToken;
 	}
 }

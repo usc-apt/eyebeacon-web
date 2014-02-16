@@ -11,6 +11,9 @@ public class Card {
 		public String payload;
 		public String displayName;
 		public String iconUrl;
+		
+		// meh, it's not like we're going to use this attribute much anyway
+		public boolean removeWhenSelected = true;
 
 		public ActionItem(String action) {
 			this.action = action;

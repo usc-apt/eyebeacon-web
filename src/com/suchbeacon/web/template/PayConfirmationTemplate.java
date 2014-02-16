@@ -24,12 +24,12 @@ public class PayConfirmationTemplate extends Template {
 		String paidText = paid?"Item Purchased!":"Payment failed...";
 		String paidDesc = paid?
 				"<p class=\"text-small\">Pick up at " + location + "</p>":
-					"<p class=\"text-small\">Please check your Venmo account.";
+					"<p class=\"text-small\">Please check your Venmo account.</p>";
 		
 		String html = "<article>" 
 				+ "<figure>" + "<img src=\"" + imageUrl + "\" width=\"100%\" height=\"100%\">" + "</figure>"
 				+ "<section>"
-				+ "<h1 class=\"text-large\">" + paidText + "</h1>"
+				+ "<h1 class=\"text-normal\">" + paidText + "</h1>"
 				+ "<hr>"
 				+ "<p class=\"text-minor\">$" + price + "</p>"
 				+	paidDesc

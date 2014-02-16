@@ -3,10 +3,10 @@ $(document).ready(function() {
 		var majorId = $(this).find('input[name=majorId]').val();
 		var minorId = $(this).find('input[name=minorId]').val();
 		var accessToken = $(this).find('input[name=accessToken]').val();
-		var plusId = $(this).find('input[name=plusId]').val();
+		var email = $(this).find('input[name=email]').val();
 		$.get('/content?majorId=' + majorId 
 				+ '&minorId=' + minorId 
-				+ '&plusId=' + plusId 
+				+ '&email=' + email 
 				+ '&accessToken=' + accessToken, function(data) {
 			console.log(data);
 			var prettifiedJson = JSON.stringify(data, null, 2);
