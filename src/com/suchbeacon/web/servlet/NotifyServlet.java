@@ -23,13 +23,13 @@ import com.suchbeacon.web.Constants;
 
 @SuppressWarnings("serial")
 public class NotifyServlet extends HttpServlet {
-  
-	private static final Logger log = Logger.getLogger(VenmoAuthServlet.class.getName());
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
 	}
 
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		Logger log = Logger.getLogger(VenmoAuthServlet.class.getName());
+
 		JsonFactory jsonFactory = new JacksonFactory();
 		Notification not = jsonFactory.fromInputStream(req.getInputStream(), Notification.class);
 		for (UserAction ua : not.getUserActions()) {
