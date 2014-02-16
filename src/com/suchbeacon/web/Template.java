@@ -34,18 +34,7 @@ public abstract class Template {
 		} else if (templateName.equals("info")) {
 			return gson.fromJson(jsonData, InfoTemplate.class);
 		} else if (templateName.equals("payment")) {
-			PaymentTemplate payTemp = 
-					gson.fromJson(jsonData, PaymentTemplate.class);
-			
-			Item i = new Item(
-					payTemp.getName(),
-					payTemp.getDescription(),
-					payTemp.getLocation(),
-					payTemp.getPrice());
-			ofy().save().entity(i).now();
-			
-			payTemp.setItemId(i.id);
-			
+			PaymentTemplate payTemp = gson.fromJson(jsonData, PaymentTemplate.class);
 			return payTemp;
 		} else if (templateName.equals("payConfirm")){
 			return gson.fromJson(jsonData, PayConfirmationTemplate.class);

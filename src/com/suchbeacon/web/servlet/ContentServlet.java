@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.suchbeacon.web.Card;
 import com.suchbeacon.web.Content;
 import com.suchbeacon.web.GlassResponse;
+import com.suchbeacon.web.Item;
 import com.suchbeacon.web.MirrorClient;
 import com.suchbeacon.web.User;
 import com.suchbeacon.web.WebResponse;
@@ -105,8 +106,27 @@ public class ContentServlet extends HttpServlet {
 			return;
 		}
 		
+		if(templateName == "payment") {
+			try {
+				JSONObject json = new JSONObject(templateDataJson);
+				Item i = new Item(
+						json.getString("name"),
+						json.getString("description"),
+						json.getString("location"),
+						json.getString("imageUrl"),
+						json.getDouble("price"));
+				ofy().save().entity(i).now();
+				json.put("itemId", i.getId());
+				templateDataJson = json.toString();
+			} catch (JSONException e) {
+				System.out.println("stupid json.");
+				e.printStackTrace();
+			}
+		}
+		
 		Content c = new Content(majorId, minorId, templateName, templateDataJson);
 		ofy().save().entity(c).now();
+		
 		if (c != null) {
 			Gson gson = new Gson();
 			resp.setContentType("application/json");
