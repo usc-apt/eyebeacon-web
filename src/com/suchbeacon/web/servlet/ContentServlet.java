@@ -28,11 +28,13 @@ public class ContentServlet extends HttpServlet {
 			majorId = Integer.parseInt(req.getParameter("majorId"));
 			minorId = Integer.parseInt(req.getParameter("minorId"));
 			accessToken = req.getParameter("accessToken");
+			if (accessToken.length() < 1) {
+				throw new NullPointerException();
+			}
 		} catch (NumberFormatException e) {
 			resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing major or minor id");
 			return;
-		}
-		if (accessToken.length() < 1) {
+		} catch (NullPointerException e) {
 			resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing access token");
 			return;
 		}
@@ -47,9 +49,7 @@ public class ContentServlet extends HttpServlet {
 			String status = "OK";
 			for(Card card : cards) { 
 				GlassResponse response = MirrorClient.insertTimeline(card, accessToken);
-				if(!response.getStatus().equals("200/201 OK")) {
-					status = response.getStatus();
-				}
+				if(!response.getStatus().equals("200/201 OK")) { status = response.getStatus(); }
 				responses.add(response);
 			}
 			

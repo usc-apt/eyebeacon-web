@@ -6,7 +6,9 @@ import java.util.Random;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.google.gson.Gson;
+import com.suchbeacon.web.template.InfoTemplate;
 import com.suchbeacon.web.template.IntroTemplate;
+import com.suchbeacon.web.template.PaymentTemplate;
 
 public abstract class Template {
 	// returns html template to feed into Mirror API
@@ -26,6 +28,10 @@ public abstract class Template {
 		System.out.println("Building Template " + templateName);
 		if (templateName.equals("intro")) {
 			return gson.fromJson(jsonData, IntroTemplate.class);
+		} else if (templateName.equals("info")) {
+			return gson.fromJson(jsonData, InfoTemplate.class);
+		} else if (templateName.equals("payment")) {
+			return gson.fromJson(jsonData, PaymentTemplate.class);
 		}
 		return null;
 	}

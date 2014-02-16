@@ -11,7 +11,7 @@ import com.suchbeacon.web.Template;
 
 public class PaymentTemplate extends Template {
 	private String name;
-	private String price;
+	private double price;
 	private String imageUrl;
 	private String location;
 	private String description;
@@ -26,11 +26,16 @@ public class PaymentTemplate extends Template {
 		String html = "<article>" 
 				+ "<figure>" + "<img src=\"" + imageUrl + "\" width=\"100%\" height=\"100%\">" + "</figure>"
 				+ "<section>"
-				+ "<table class=\"text-small slign-justify\">" + "<tbody>" 
-				+ "<tr>" + "<td>Item:</td>" + "<td>"+ name + "</td>" + "</tr>"
-				+ "<tr>" + "<td>Price</td>" + "<td>" + price + "</td>" + "</tr>"
-				+ "<tr>" + "<td>Location</td>" + "<td>" + location + "</td>" + "</tr>"
-				+ "</tbody>" + "</table>" 
+				+ "<p class=\"text-minor\">Purhcasing:</p>"
+				+ "<h1 class=\"text-large\">" + name + "</h1>"
+				+ "<hr>"
+				+ "<p class=\"text-minor\">$" + price + "</p>"
+				+ "<p class=\"text-small\">" + location + "</p>"
+				/*+ "<table class=\"text-small slign-justify\">" + "<tbody>" 
+				+ "<tr>" + "<td class=\"text-small\">Item:</td>" + "<td>"+ name + "</td>" + "</tr>"
+				+ "<tr>" + "<td class=\"text-small\">Price:</td>" + "<td>" + price + "</td>" + "</tr>"
+				+ "<tr>" + "<td class=\"text-small\">Location:</td>" + "<td>" + location + "</td>" + "</tr>"
+				+ "</tbody>" + "</table>"*/ 
 				+ "</section>" 
 				+ "</article>";
 		html += "<article>" 
@@ -41,7 +46,7 @@ public class PaymentTemplate extends Template {
 		actionItems.add(new ActionItem("purchase", "DEFAULT", "Purchase"));
 		
 		
-		cards.add(new Card(html, bundleId, (ActionItem[]) actionItems.toArray()));
+		cards.add(new Card(html, bundleId, actionItems));
 		return cards;
 	}
 

@@ -50,15 +50,13 @@ public class MirrorClient {
 			}
 		} catch (MalformedURLException e) {
 			return new GlassResponse("400 Bad Request", "Malformed URL");
+		} catch (JSONException e) {
+			return new GlassResponse("400 Bad Request", "JSON Exception");
 		} catch (IOException e) {
 			System.out.println("IO");
 			System.out.println(e.getMessage());
 			return new GlassResponse("400 Bad Request", "IO Exception");
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return new GlassResponse("400 Bad Request", "JSON Exception");
-		}
+		} 
 	}
 
 	private static JSONArray generateActionItems(List<ActionItem> actionItems) throws JSONException{
@@ -82,8 +80,8 @@ public class MirrorClient {
 				value.put("state", a.state);
 				value.put("displayName", a.displayName);
 				if (a.iconUrl != null) value.put("iconUrl", a.iconUrl);
-				
 				valuesArray.put(value);
+				
 				menuItem.put("values", valuesArray);
 			}
 			menuItems.put(menuItem);

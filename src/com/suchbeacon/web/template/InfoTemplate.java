@@ -25,12 +25,20 @@ public class InfoTemplate extends Template {
 		List<Card> cards = new ArrayList<Card>();
 		String bundleId = generateBundleId();
 		
+		if (speakableText == null) {
+			speakableText = name; 
+		}
+		speakableText += " ";	
+		
 		String html = "<article class=\"cover-only\">"
 				+ "<figure>"
 				+ "<img src=\"" + imageUrl + "\" width=\"100%\" height=\"100%\">"
 				+ "</figure>" 
 				+ "<section>" 
-				+ "<h1 class=\"text-large\">" + name + "</h1>" + "<hr>"
+				+ "<h1 class=\"text-large\">" + name 
+				+ (videoUrl != null ? "<img src=\"http://ptzlabs.com/play.png\" style=\"margin-left: 15px\" />" : "")
+				+ "</h1>"
+				+ "<hr>"
 				+ "<p class=\"text-small\">" + "Located In:" + "</p>" 
 				+ "<p class=\"text-minor\">" + location + "</p>" 
 				+ "</section>"
@@ -39,19 +47,19 @@ public class InfoTemplate extends Template {
 		//Adds speakable text only if we have info to tell the user
 		for (Info i : infos) {
 			html += "<article class=\"auto-paignate\">"
+					+ "<section>"
 					+ "<h1 class=\"text-large\">" + i.section + "</h1>"
-					+ "<p class=\"text-small\">" + i.desc + "</p>" 
+					+ "<p class=\"text-small\">" + i.desc + "</p>"
+					+ "</section>"
 					+ "</article>";
-			speakableText += i.section + " " + i.desc;
-		}
-		actionItems.add(new ActionItem("DELETE"));
-		
-		if(!speakableText.isEmpty()){
-			actionItems.add(new ActionItem("READ_ALOUD"));
+			speakableText += i.section + " " + i.desc + " ";
 		}
 		
 		if(videoUrl != null)
 			actionItems.add(new ActionItem("PLAY_VIDEO", videoUrl));
+		if(!speakableText.isEmpty())
+			actionItems.add(new ActionItem("READ_ALOUD"));
+		actionItems.add(new ActionItem("DELETE"));
 		
 		//We can setSpeakableText anyway because there will not be a read_aloud action
 		cards.add((new Card(html, bundleId, actionItems).setSpeakableText(speakableText)));

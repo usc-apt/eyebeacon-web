@@ -1,6 +1,5 @@
 package com.suchbeacon.web;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
