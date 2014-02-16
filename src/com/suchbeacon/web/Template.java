@@ -3,6 +3,8 @@ package com.suchbeacon.web;
 import java.util.List;
 import java.util.Random;
 
+import static com.googlecode.objectify.ObjectifyService.ofy;
+
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.google.gson.Gson;
@@ -32,7 +34,19 @@ public abstract class Template {
 		} else if (templateName.equals("info")) {
 			return gson.fromJson(jsonData, InfoTemplate.class);
 		} else if (templateName.equals("payment")) {
-			return gson.fromJson(jsonData, PaymentTemplate.class);
+			PaymentTemplate payTemp = 
+					gson.fromJson(jsonData, PaymentTemplate.class);
+			
+			Item i = new Item(
+					payTemp.getName(),
+					payTemp.getDescription(),
+					payTemp.getLocation(),
+					payTemp.getPrice());
+			ofy().save().entity(i).now();
+			
+			payTemp.setItemId(i.id);
+			
+			return payTemp;
 		} else if (templateName.equals("payConfirm")){
 			return gson.fromJson(jsonData, PayConfirmationTemplate.class);
 		}
