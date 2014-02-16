@@ -36,12 +36,16 @@ public class NotifyServlet extends HttpServlet {
 		JsonFactory jsonFactory = new JacksonFactory();
 		Notification not = jsonFactory.fromInputStream(req.getInputStream(), Notification.class);
 		
+		if(!not.getCollection().equals("timeline")){
+			return;
+		}
+		
 		String email = not.getUserToken();
 		
 		System.out.println(not.toPrettyString());
 		for (UserAction ua : not.getUserActions()) {
 			// If we have a custom action, we know it is a payment
-			if (ua.getType().equals("CUSTOM")) {
+			if (ua.getType().equals("CUSTOM") ) {
 				
 				// TODO: Pull from the database and get the information about the item
 				/* Temporary Info for item */
