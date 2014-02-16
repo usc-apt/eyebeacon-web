@@ -27,7 +27,7 @@ public class MirrorClient {
 			operationArray.put("CUSTOM");
 			jsonBody.put("operation", operationArray);
 			
-			return request("https://www.googleapis.com/mirror/v1/subscriptions", authToken, jsonBody.toString());
+			return request("https://www.googleapis.com/mirror/v1/subscriptions", authToken, jsonBody.toString(), "POST");
 		} catch (JSONException e) {
 			return new GlassResponse("400 Bad Request", "JSON Exception");
 		} 
@@ -44,7 +44,7 @@ public class MirrorClient {
 			jsonBody.put("notification", generateNotification());
 			jsonBody.put("speakableText", card.getSpeakableText());
 			
-			return request("https://www.googleapis.com/mirror/v1/timeline", authToken, jsonBody.toString());
+			return request("https://www.googleapis.com/mirror/v1/timeline", authToken, jsonBody.toString(), "POST");
 		} catch (JSONException e) {
 			return new GlassResponse("400 Bad Request", "JSON Exception");
 		} 
@@ -59,19 +59,19 @@ public class MirrorClient {
 			jsonBody.put("notification", generateNotification());
 			jsonBody.put("speakableText", card.getSpeakableText());
 			
-			return request("https://www.googleapis.com/mirror/v1/timeline/" + timelineCardId, authToken, jsonBody.toString());
+			return request("https://www.googleapis.com/mirror/v1/timeline/" + timelineCardId, authToken, jsonBody.toString(), "PUT");
 		}catch(JSONException e){
 			System.out.println("dam json...");
 			return new GlassResponse("400 Bad Request", "JSONException");
 		}
 	}
 	
-	public static GlassResponse request(String requestUrl, String authToken, String body) {
+	public static GlassResponse request(String requestUrl, String authToken, String body, String requestType) {
 		try {
 			URL url = new URL(requestUrl);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
-			connection.setRequestMethod("POST");
+			connection.setRequestMethod(requestType);
 			connection.setRequestProperty("Authorization", "Bearer " + authToken);
 			connection.setRequestProperty("Content-Type", "application/json");
 
@@ -97,7 +97,7 @@ public class MirrorClient {
 			return new GlassResponse("400 Bad Request", "IO Exception");
 		} 
 	}
-
+	
 	private static JSONArray generateActionItems(List<ActionItem> actionItems) throws JSONException{
 		
 		JSONArray menuItems = new JSONArray();
