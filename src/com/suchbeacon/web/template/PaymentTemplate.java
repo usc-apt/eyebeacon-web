@@ -32,12 +32,10 @@ public class PaymentTemplate extends Template {
 				+ "<p class=\"text-small\">" + location + "</p>"
 				+ "</section>" 
 				+ "</article>";
-		html += "<article>"
-				+ "<section>"
+		html += "<article class=\"auto-paginate>"
 				+ "<h1 class=\"text-large\">" + name + "</h1>"
 				+ "<hr>"
 				+ "<p class=\"text-small\">" + description + "</p>"
-				+ "</section>"
 				+ "</article>";
 		
 		actionItems.add(new ActionItem("purchase", "DEFAULT", "Purchase"));
