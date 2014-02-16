@@ -10,6 +10,7 @@ import com.suchbeacon.web.Card.ActionItem;
 import com.suchbeacon.web.Template;
 
 public class PaymentTemplate extends Template {
+	private Long itemId;
 	private String name;
 	private double price;
 	private String imageUrl;
@@ -53,7 +54,36 @@ public class PaymentTemplate extends Template {
 		json.put("imageUrl", imageUrl);
 		json.put("location", location);
 		json.put("description", description);
-		
+		json.put("itemId", itemId);
 		return json;
 	}
+	
+	public Long getItemId() {
+		return itemId;
+	}
+
+	public void setItemId(Long itemId) {
+		this.itemId = itemId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
 }
