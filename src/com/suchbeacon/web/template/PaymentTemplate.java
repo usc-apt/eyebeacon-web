@@ -26,25 +26,22 @@ public class PaymentTemplate extends Template {
 		String html = "<article>" 
 				+ "<figure>" + "<img src=\"" + imageUrl + "\" width=\"100%\" height=\"100%\">" + "</figure>"
 				+ "<section>"
-				+ "<p class=\"text-minor\">Purhcasing:</p>"
 				+ "<h1 class=\"text-large\">" + name + "</h1>"
 				+ "<hr>"
 				+ "<p class=\"text-minor\">$" + price + "</p>"
 				+ "<p class=\"text-small\">" + location + "</p>"
-				/*+ "<table class=\"text-small slign-justify\">" + "<tbody>" 
-				+ "<tr>" + "<td class=\"text-small\">Item:</td>" + "<td>"+ name + "</td>" + "</tr>"
-				+ "<tr>" + "<td class=\"text-small\">Price:</td>" + "<td>" + price + "</td>" + "</tr>"
-				+ "<tr>" + "<td class=\"text-small\">Location:</td>" + "<td>" + location + "</td>" + "</tr>"
-				+ "</tbody>" + "</table>"*/ 
 				+ "</section>" 
 				+ "</article>";
-		html += "<article>" 
-				+ "<h1 class=\"auto-paginate\">" + "<hr>"
+		html += "<article>"
+				+ "<section>"
+				+ "<h1 class=\"text-large\">" + name + "</h1>"
+				+ "<hr>"
 				+ "<p class=\"text-small\">" + description + "</p>"
+				+ "</section>"
 				+ "</article>";
-		actionItems.add(new ActionItem("DELETE"));
-		actionItems.add(new ActionItem("purchase", "DEFAULT", "Purchase"));
 		
+		actionItems.add(new ActionItem("purchase", "DEFAULT", "Purchase"));
+		actionItems.add(new ActionItem("DELETE"));
 		
 		cards.add(new Card(html, bundleId, actionItems));
 		return cards;
