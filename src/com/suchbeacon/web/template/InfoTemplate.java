@@ -49,6 +49,7 @@ public class InfoTemplate extends Template {
 			html += "<article class=\"auto-paignate\">"
 					//+ "<section>"
 					+ "<h1 class=\"text-large\">" + i.section + "</h1>"
+					+ "<hr>"
 					+ "<p class=\"text-small\">" + i.desc + "</p>"
 					//+ "</section>"
 					+ "</article>";
