@@ -25,9 +25,9 @@ public class Card {
 			this.payload = payload;
 		}
 
-		public ActionItem(String id, String state, String displayName) {
+		public ActionItem(String id, String state, String displayName, String payload) {
 			this.id = id;
-			this.payload = null;
+			this.payload = payload;
 			this.state = state;
 			this.action = "CUSTOM";
 			this.displayName = displayName;
