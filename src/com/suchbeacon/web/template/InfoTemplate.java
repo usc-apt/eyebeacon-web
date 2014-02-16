@@ -3,6 +3,9 @@ package com.suchbeacon.web.template;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.appengine.labs.repackaged.org.json.JSONArray;
+import com.google.appengine.labs.repackaged.org.json.JSONException;
+import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.suchbeacon.web.Card;
 import com.suchbeacon.web.Card.ActionItem;
 import com.suchbeacon.web.Template;
@@ -60,7 +63,29 @@ public class InfoTemplate extends Template {
 		private String section;
 		private String desc;
 
-		public Info() {
+		public Info() { }
+		public JSONObject toJson() throws JSONException {
+			JSONObject json = new JSONObject();
+			json.put("section", section);
+			json.put("desc", desc);
+			return json;
 		}
+	}
+	
+	public JSONObject toJson() throws JSONException {
+		JSONObject json = new JSONObject();
+		json.put("name", name);
+		json.put("location", location);
+		json.put("imageUrl", imageUrl);
+		json.put("videoUrl", videoUrl);
+		json.put("speakableText", speakableText);
+		
+		JSONArray infoArray = new JSONArray();
+		for(Info i : infos) {
+			infoArray.put(i.toJson());
+		}
+		json.put("infos", infoArray);
+		
+		return json;
 	}
 }
