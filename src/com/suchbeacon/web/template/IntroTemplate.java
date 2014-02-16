@@ -31,15 +31,19 @@ public class IntroTemplate extends Template {
 
 		for (Exhibit e : exhibits) {
 			List<ActionItem> actionItems = new ArrayList<ActionItem>();
-			actionItems.add(new ActionItem("DELETE"));
 			
 			if(e.videoUrl != null)
 				actionItems.add(new ActionItem("PLAY_VIDEO", e.videoUrl));
+		
+			actionItems.add(new ActionItem("DELETE"));
 				
 			cards.add(new Card("<article class=\"photo\">"
 					+ "<img src=\"" + e.imageUrl + "\" width=\"100%\" height=\"100%\" />"
 					+ "<div class=\"overlay-gardient-tall-dark\" />"
-					+ "<section>" + "<p class=\"text-auto-size\">" + e.name + "</p>" + "</section>"
+					+ "<section>" + "<p class=\"text-auto-size\">"
+					+ e.name
+					+ (e.videoUrl != null ? "<img src=\"http://ptzlabs.com/play.png\" style=\"margin-left: 15px\" />" : "")
+					+ "</p>" + "</section>"
 					+ "</article>", bundleId, actionItems ));
 		}
 		return cards;

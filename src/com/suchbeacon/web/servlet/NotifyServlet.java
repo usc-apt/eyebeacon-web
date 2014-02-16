@@ -56,16 +56,23 @@ public class NotifyServlet extends HttpServlet {
 				String accessToken = User.findUser(email).getVenmoAuthToken();
 				String targetEmail = item.getTargetEmail();
 				
-				URL payURL = new URL(Constants.VENMO_PAY_URL);
+				//URL payURL = new URL(Constants.VENMO_PAY_URL);
+				//SANDBOX BELOW
+				URL payURL = new URL(Constants.VENMO_PAY_SANDBOX_URL);
 				HttpURLConnection connection = (HttpURLConnection) payURL.openConnection();
 				connection.setDoOutput(true);
 				connection.setRequestMethod("POST");
 
 				OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
-				writer.write("access_token=" + accessToken
+				/*writer.write("access_token=" + accessToken
 						+ "&email=" + targetEmail
 						+ "&note=" + item.getName()
-						+ "&amount=" + item.getPrice());
+						+ "&amount=" + item.getPrice());*/
+				// SANDBOX BELOW
+				writer.write("access_token=" + accessToken
+					+ "&email=" + "venmo@venmo.com"
+					+ "&note=" + item.getName()
+					+ "&amount=" + "0.1");
 				writer.close();
 				
 				try {
