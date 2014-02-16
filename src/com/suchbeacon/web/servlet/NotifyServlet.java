@@ -20,6 +20,7 @@ import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.suchbeacon.web.Card;
 import com.suchbeacon.web.Constants;
+import com.suchbeacon.web.Item;
 import com.suchbeacon.web.MirrorClient;
 import com.suchbeacon.web.Template;
 import com.suchbeacon.web.User;
@@ -51,12 +52,9 @@ public class NotifyServlet extends HttpServlet {
 				/* Temporary Info for item */
 				String buyingItemId = ua.getPayload();
 				System.out.println("PAYLOAD: " + buyingItemId);
-				String buyingItemName = "Sloth Poster";
-				String buyingItemDesc = "Dolla Dolla Bill Y'all";
-				double buyingItemPrice = 0.10;
-				String buyingItemLocation = "The DAAMMNNN Store";
+				Item item = Item.findItem(Long.parseLong(buyingItemId));
 				String accessToken = User.findUser(email).getVenmoAuthToken();
-				String targetEmail = "venmo@venmo.com";
+				String targetEmail = item.getTargetEmail();
 				
 				URL payURL = new URL(Constants.VENMO_PAY_URL);
 				HttpURLConnection connection = (HttpURLConnection) payURL.openConnection();
@@ -66,8 +64,8 @@ public class NotifyServlet extends HttpServlet {
 				OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
 				writer.write("access_token=" + accessToken
 						+ "&email=" + targetEmail
-						+ "&note=" + buyingItemDesc
-						+ "&amount=" + buyingItemPrice);
+						+ "&note=" + item.getName()
+						+ "&amount=" + item.getPrice());
 				writer.close();
 				
 				try {
@@ -84,11 +82,8 @@ public class NotifyServlet extends HttpServlet {
 						System.out.println(jsonResponse.toString());
 
 						JSONObject payConfirmData = new JSONObject();
-						payConfirmData.put("name", buyingItemName);
-						payConfirmData.put("description", buyingItemDesc);
-						payConfirmData.put("price", buyingItemPrice);
-						payConfirmData.put("location", buyingItemLocation);
-
+						payConfirmData.put("itemId", buyingItemId);
+						
 						// Check to see if the payment was settled or failed
 						String paymentStatus = jsonResponse.getJSONObject("data").getJSONObject("payment").getString("status");
 						if (paymentStatus.equals("settled")) {
@@ -100,7 +95,6 @@ public class NotifyServlet extends HttpServlet {
 						}
 
 						Card mCard = Template.build("payConfirm", payConfirmData.toString()).render().get(0);
-						log.info("UserToken: " + not.getUserToken());
 						MirrorClient.insertTimeline(mCard, User.getAuthTokenFromEmail(not.getUserToken()));
 					} else {
 						System.out.println("HTTPError: " + connection.getResponseCode() );
@@ -108,8 +102,15 @@ public class NotifyServlet extends HttpServlet {
 						BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 						while ((line = reader.readLine()) != null)
 							jsonResponseRaw = jsonResponseRaw.concat(line);
+						
 						reader.close();
 						System.out.println("Response: " + jsonResponseRaw);
+						
+						JSONObject payConfirmData = new JSONObject();
+						payConfirmData.put("itemId", buyingItemId);
+						payConfirmData.put("paid", false);
+						Card mCard = Template.build("payConfirm", payConfirmData.toString()).render().get(0);
+						MirrorClient.insertTimeline(mCard, User.getAuthTokenFromEmail(not.getUserToken()));
 					}
 				} catch (JSONException e) {
 					resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad Payload/DB Population");

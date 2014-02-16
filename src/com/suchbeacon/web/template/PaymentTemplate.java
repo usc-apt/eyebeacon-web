@@ -16,6 +16,7 @@ public class PaymentTemplate extends Template {
 	private String imageUrl;
 	private String location;
 	private String description;
+	private String targetEmail;
 
 	@Override
 	public List<Card> render() {
@@ -39,7 +40,7 @@ public class PaymentTemplate extends Template {
 				+ "<p class=\"text-small\">" + description + "</p>"
 				+ "</article>";
 		
-		actionItems.add(new ActionItem("purchase", "DEFAULT", "Purchase", String.valueOf(itemId)));
+		actionItems.add(new ActionItem(String.valueOf(itemId), "DEFAULT", "Purchase"));
 		actionItems.add(new ActionItem("DELETE"));
 		
 		cards.add(new Card(html, bundleId, actionItems));

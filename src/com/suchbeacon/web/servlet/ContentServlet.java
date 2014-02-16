@@ -115,7 +115,8 @@ public class ContentServlet extends HttpServlet {
 						json.getString("description"),
 						json.getString("location"),
 						json.getString("imageUrl"),
-						json.getDouble("price"));
+						json.getDouble("price"),
+						json.getString("targetEmail"));
 				ofy().save().entity(i).now();
 				json.put("itemId", i.getId());
 				templateDataJson = json.toString();

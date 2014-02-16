@@ -13,17 +13,19 @@ public class Item {
 	String	description;
 	String	location;
 	String  imageUrl;
+	String  targetEmail;
 	double	price;
 
 	private Item() {
 	}
 
-	public Item(String name, String description, String location, String imageUrl, double price) {
+	public Item(String name, String description, String location, String imageUrl, double price, String targetEmail) {
 		this.name = name;
 		this.price = price;
 		this.location = location;
 		this.imageUrl = imageUrl;
 		this.description = description;
+		this.targetEmail = targetEmail;
 	}
 	
 	public Long getId() {
@@ -72,6 +74,14 @@ public class Item {
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+
+	public String getTargetEmail() {
+		return targetEmail;
+	}
+
+	public void setTargetEmail(String targetEmail) {
+		this.targetEmail = targetEmail;
 	}
 
 	public static Item findItem(Long id) {

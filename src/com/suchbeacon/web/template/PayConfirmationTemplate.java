@@ -17,6 +17,7 @@ public class PayConfirmationTemplate extends Template {
 	@Override
 	public List<Card> render() {
 		Item item = Item.findItem(itemId);
+		System.out.println("FOUND ITEM!");
 		String bundleId = generateBundleId();
 		List<Card> cards = new ArrayList<Card>();
 		List<ActionItem> actionItems = new ArrayList<ActionItem>();
