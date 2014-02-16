@@ -50,6 +50,22 @@ public class MirrorClient {
 		} 
 	}
 	
+	public static GlassResponse updateTimelineItem(Card card, String authToken, String timelineCardId){
+		try{
+			JSONObject jsonBody	= new JSONObject();
+			jsonBody.put("html", card.getHtml());
+			jsonBody.put("bundleId", card.getBundleId());
+			jsonBody.put("menuItems", generateActionItems(card.getActionItems()));
+			jsonBody.put("notification", generateNotification());
+			jsonBody.put("speakableText", card.getSpeakableText());
+			
+			return request("https://www.googleapis.com/mirror/v1/timeline/" + timelineCardId, authToken, jsonBody.toString());
+		}catch(JSONException e){
+			System.out.println("dam json...");
+			return new GlassResponse("400 Bad Request", "JSONException");
+		}
+	}
+	
 	public static GlassResponse request(String requestUrl, String authToken, String body) {
 		try {
 			URL url = new URL(requestUrl);

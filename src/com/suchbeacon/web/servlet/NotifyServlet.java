@@ -100,7 +100,7 @@ public class NotifyServlet extends HttpServlet {
 
 						Card mCard = Template.build("payConfirm", payConfirmData.toString()).render().get(0);
 						log.info("UserToken: " + not.getUserToken());
-						MirrorClient.insertTimeline(mCard, User.getAuthTokenFromEmail(not.getUserToken()));
+						MirrorClient.updateTimelineItem(mCard, User.getAuthTokenFromEmail(not.getUserToken()), not.getItemId());
 					} else {
 						System.out.println("HTTPError: " + connection.getResponseCode() );
 						String line, jsonResponseRaw = "";
