@@ -19,7 +19,11 @@ import com.google.api.services.mirror.model.Notification;
 import com.google.api.services.mirror.model.UserAction;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
+import com.suchbeacon.web.Card;
 import com.suchbeacon.web.Constants;
+import com.suchbeacon.web.MirrorClient;
+import com.suchbeacon.web.Template;
+import com.suchbeacon.web.template.PayConfirmationTemplate;
 
 @SuppressWarnings("serial")
 public class NotifyServlet extends HttpServlet {
@@ -36,8 +40,8 @@ public class NotifyServlet extends HttpServlet {
 
 			// If we have a custom action, we know it is a payment
 			if (ua.getType().equals("CUSTOM")) {
-				URL payURL								= new URL(Constants.VENMO_PAY_URL);
-				HttpURLConnection connection = (HttpURLConnection)payURL.openConnection();
+				URL payURL										= new URL(Constants.VENMO_PAY_URL);
+				HttpURLConnection connection 	= (HttpURLConnection)payURL.openConnection();
 				connection.setDoOutput(true);
 				connection.setRequestMethod("POST");
 				
@@ -47,8 +51,11 @@ public class NotifyServlet extends HttpServlet {
 				try {
 					// TODO: Pull from the database and get the information about the item
 					/* Temporary Info for item */
-					String buyingItemDesc = "Dolla Dolla Bill Y'all";
-					String buyingItemPrice = "3309";
+					String buyingItemName			= "Sloth Poster"; 
+					String buyingItemDesc 		= "Dolla Dolla Bill Y'all";
+					String buyingItemPrice		= "3309";
+					String buyingItemLocation	= "The DAAMMNNN Store";
+					
 					//Our own access_token
 					paymentRequest.put("access_token", "78907908");
 					
@@ -71,14 +78,22 @@ public class NotifyServlet extends HttpServlet {
 						JSONObject jsonResponse = new JSONObject(jsonResponseRaw);
 						
 						//Check to see if the payment was settled or failed
+						JSONObject payConfirmData = new JSONObject();
+						payConfirmData.put("name", buyingItemName);
+						payConfirmData.put("description", buyingItemDesc);
+						payConfirmData.put("price", buyingItemPrice);
+						payConfirmData.put("location", buyingItemLocation);
+						
 						if(jsonResponse.get("status").equals("settled")){
 							log.log(Level.INFO, "The Payment was settled!");
-							//TODO: Insert Timeline Item to tell the user where to go go pickup their item
+							payConfirmData.put("paid", true);
 						}
 						else{
 							log.log(Level.WARNING, "The Payment failed! Sucks to Suck");
-							//TODO: Insert Timeline Item to tell the user his payment failed.
+							payConfirmData.put("paid", false);
 						}
+						Card mCard = Template.build("payConfirm", payConfirmData.toString()).render().get(0);
+						//TODO:Insert the card into the users' timeline
 					}	 	
 				} catch (JSONException e) {
 					resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad Payload/DB Population");

@@ -6,43 +6,36 @@ import java.util.List;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.suchbeacon.web.Card;
-import com.suchbeacon.web.Card.ActionItem;
 import com.suchbeacon.web.Template;
+import com.suchbeacon.web.Card.ActionItem;
 
-public class PaymentTemplate extends Template {
+public class PayConfirmationTemplate extends Template {
 	private String name;
 	private double price;
 	private String imageUrl;
 	private String location;
-	private String description;
-
+	private boolean paid;
+	
 	@Override
 	public List<Card> render() {
-		System.out.println("Rendering PaymentTemplate");
 		String bundleId = generateBundleId();
 		List<Card> cards = new ArrayList<Card>();
 		List<ActionItem> actionItems = new ArrayList<ActionItem>();
+		String paidText = paid?"Item Purchased!":"Payment failed...";
+		String paidDesc = paid?
+				"<p class=\"text-small\">Pick up at " + location + "</p>":
+					"<p class=\"text-small\">Please check your Venmo account.";
 		
 		String html = "<article>" 
 				+ "<figure>" + "<img src=\"" + imageUrl + "\" width=\"100%\" height=\"100%\">" + "</figure>"
 				+ "<section>"
-				+ "<h1 class=\"text-large\">" + name + "</h1>"
+				+ "<h1 class=\"text-large\">" + paidText + "</h1>"
 				+ "<hr>"
 				+ "<p class=\"text-minor\">$" + price + "</p>"
-				+ "<p class=\"text-small\">" + location + "</p>"
+				+	paidDesc
 				+ "</section>" 
 				+ "</article>";
-		html += "<article class=\"auto-paginate>"
-				+ "<h1 class=\"text-large\">" + name + "</h1>"
-				+ "<hr>"
-				+ "<p class=\"text-small\">" + description + "</p>"
-				+ "</article>";
-		
-		actionItems.add(new ActionItem("purchase", "DEFAULT", "Purchase"));
-		actionItems.add(new ActionItem("DELETE"));
-		
-		cards.add(new Card(html, bundleId, actionItems));
-		return cards;
+		return null;
 	}
 
 	@Override
@@ -52,8 +45,9 @@ public class PaymentTemplate extends Template {
 		json.put("price", price);
 		json.put("imageUrl", imageUrl);
 		json.put("location", location);
-		json.put("description", description);
+		json.put("paid", paid);
 		
 		return json;
 	}
+
 }
