@@ -25,6 +25,14 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	    <servlet-name>VenmoAuth</servlet-name>
 	    <url-pattern>/venauth</url-pattern>
 	</servlet-mapping>
+	<servlet>
+	    <servlet-name>Notify</servlet-name>
+	    <servlet-class>com.suchbeacon.web.servlet.NotifyServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	    <servlet-name>Notify</servlet-name>
+	    <url-pattern>/glass/notify</url-pattern>
+	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
