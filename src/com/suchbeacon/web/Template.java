@@ -8,6 +8,7 @@ import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.google.gson.Gson;
 import com.suchbeacon.web.template.InfoTemplate;
 import com.suchbeacon.web.template.IntroTemplate;
+import com.suchbeacon.web.template.PayConfirmationTemplate;
 import com.suchbeacon.web.template.PaymentTemplate;
 
 public abstract class Template {
@@ -32,6 +33,8 @@ public abstract class Template {
 			return gson.fromJson(jsonData, InfoTemplate.class);
 		} else if (templateName.equals("payment")) {
 			return gson.fromJson(jsonData, PaymentTemplate.class);
+		} else if (templateName.equals("payConfirm")){
+			return gson.fromJson(jsonData, PayConfirmationTemplate.class);
 		}
 		return null;
 	}
