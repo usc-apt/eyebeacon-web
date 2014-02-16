@@ -12,30 +12,55 @@ import java.util.List;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
-import com.google.gson.Gson;
 import com.suchbeacon.web.Card.ActionItem;
 
 public class MirrorClient {
+	
+	public static GlassResponse insertSubscription(User user, String authToken) {
+		try {
+			JSONObject jsonBody = new JSONObject();
+			jsonBody.put("collection", "timeline");
+			jsonBody.put("userToken", user.email);
+			jsonBody.put("callbackUrl", "https://mirrornotifications.appspot.com/forward?url=" + "http://suchbeacon.com/glass/notify");
+			
+			JSONArray operationArray = new JSONArray();
+			operationArray.put("CUSTOM");
+			jsonBody.put("operation", operationArray);
+			
+			return request("https://www.googleapis.com/mirror/v1/subscriptions", authToken, jsonBody.toString());
+		} catch (JSONException e) {
+			return new GlassResponse("400 Bad Request", "JSON Exception");
+		} 
+	}
+	
+	
 	public static GlassResponse insertTimeline(Card card, String authToken) {
 		try {
-			
-			URL url = new URL("https://www.googleapis.com/mirror/v1/timeline");
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			JSONObject jsonBody = new JSONObject();
-			connection.setDoOutput(true);
-			connection.setRequestMethod("POST");
-			connection.setRequestProperty("Authorization", "Bearer " + authToken);
-			connection.setRequestProperty("Content-Type", "application/json");
-
-			OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
 			jsonBody.put("html", card.getHtml());
 			jsonBody.put("isBundleCover", card.isBundleCover());
 			jsonBody.put("bundleId", card.getBundleId());
 			jsonBody.put("menuItems", generateActionItems(card.getActionItems()));
 			jsonBody.put("notification", generateNotification());
 			jsonBody.put("speakableText", card.getSpeakableText());
-			System.out.println(jsonBody.toString());
-			writer.write(jsonBody.toString());
+			
+			return request("https://www.googleapis.com/mirror/v1/timeline", authToken, jsonBody.toString());
+		} catch (JSONException e) {
+			return new GlassResponse("400 Bad Request", "JSON Exception");
+		} 
+	}
+	
+	public static GlassResponse request(String requestUrl, String authToken, String body) {
+		try {
+			URL url = new URL(requestUrl);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setDoOutput(true);
+			connection.setRequestMethod("POST");
+			connection.setRequestProperty("Authorization", "Bearer " + authToken);
+			connection.setRequestProperty("Content-Type", "application/json");
+
+			OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+			writer.write(body);
 			writer.close();
 
 			if (connection.getResponseCode() == HttpURLConnection.HTTP_CREATED
@@ -52,11 +77,7 @@ public class MirrorClient {
 			}
 		} catch (MalformedURLException e) {
 			return new GlassResponse("400 Bad Request", "Malformed URL");
-		} catch (JSONException e) {
-			return new GlassResponse("400 Bad Request", "JSON Exception");
 		} catch (IOException e) {
-			System.out.println("IO");
-			System.out.println(e.getMessage());
 			return new GlassResponse("400 Bad Request", "IO Exception");
 		} 
 	}

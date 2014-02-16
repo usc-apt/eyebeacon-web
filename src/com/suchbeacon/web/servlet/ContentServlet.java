@@ -16,6 +16,7 @@ import com.suchbeacon.web.Card;
 import com.suchbeacon.web.Content;
 import com.suchbeacon.web.GlassResponse;
 import com.suchbeacon.web.MirrorClient;
+import com.suchbeacon.web.User;
 import com.suchbeacon.web.WebResponse;
 
 @SuppressWarnings("serial")
@@ -24,18 +25,22 @@ public class ContentServlet extends HttpServlet {
 		int majorId = 0;
 		int minorId = 0;
 		String accessToken = "";
+		String email = "";
+		
 		try {
 			majorId = Integer.parseInt(req.getParameter("majorId"));
 			minorId = Integer.parseInt(req.getParameter("minorId"));
 			accessToken = req.getParameter("accessToken");
-			if (accessToken.length() < 1) {
+			email = req.getParameter("plusId");
+			
+			if (accessToken.length() < 1 || email.length() < 1) {
 				throw new NullPointerException();
 			}
 		} catch (NumberFormatException e) {
 			resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing major or minor id");
 			return;
 		} catch (NullPointerException e) {
-			resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing access token");
+			resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing access token or email");
 			return;
 		}
 		
@@ -47,6 +52,17 @@ public class ContentServlet extends HttpServlet {
 			List<Card> cards = c.buildCards();
 			List<GlassResponse> responses = new ArrayList<GlassResponse>();
 			String status = "OK";
+			
+			// subscribe to user's timeline if doesn't exist already
+			if(User.findUser(email) == null) {
+				User user = new User(email);
+				ofy().save().entity(user).now();
+				
+				GlassResponse response = MirrorClient.insertSubscription(user, accessToken);
+				if(!response.getStatus().equals("200/201 OK")) { status = response.getStatus(); }
+				responses.add(response);
+			}
+			
 			for(Card card : cards) { 
 				GlassResponse response = MirrorClient.insertTimeline(card, accessToken);
 				if(!response.getStatus().equals("200/201 OK")) { status = response.getStatus(); }
