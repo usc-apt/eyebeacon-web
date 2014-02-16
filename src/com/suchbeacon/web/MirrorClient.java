@@ -12,11 +12,13 @@ import java.util.List;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
+import com.google.gson.Gson;
 import com.suchbeacon.web.Card.ActionItem;
 
 public class MirrorClient {
 	public static GlassResponse insertTimeline(Card card, String authToken) {
 		try {
+			
 			URL url = new URL("https://www.googleapis.com/mirror/v1/timeline");
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			JSONObject jsonBody = new JSONObject();
@@ -75,7 +77,7 @@ public class MirrorClient {
 			} else {
 				// Custom so we need to set that up.
 				menuItem.put("id", a.id);
-				
+				menuItem.put("payload", a.payload);
 				JSONArray valuesArray = new JSONArray();
 				
 				JSONObject value = new JSONObject();
