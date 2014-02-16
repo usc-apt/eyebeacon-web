@@ -47,10 +47,10 @@ public class InfoTemplate extends Template {
 		//Adds speakable text only if we have info to tell the user
 		for (Info i : infos) {
 			html += "<article class=\"auto-paignate\">"
-					+ "<section>"
+					//+ "<section>"
 					+ "<h1 class=\"text-large\">" + i.section + "</h1>"
 					+ "<p class=\"text-small\">" + i.desc + "</p>"
-					+ "</section>"
+					//+ "</section>"
 					+ "</article>";
 			speakableText += i.section + " " + i.desc + " ";
 		}
